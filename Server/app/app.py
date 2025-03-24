@@ -8,6 +8,8 @@ app = Flask(__name__)
 
 @app.route('/', methods=["GET"])
 def get_img():
+    current_time_seconds = time.time()
+    readable_time = datetime.fromtimestamp(current_time_seconds)
 
     cap = cv2.VideoCapture(0)
 
@@ -26,7 +28,7 @@ def get_img():
 
     cap.release()
 
-    return jsonify({'img': img_base64})
+    return jsonify({'timestamp': readable_time.isoformat(), 'img': img_base64})
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
