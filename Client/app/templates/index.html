@@ -4,6 +4,24 @@
     
 </head>
 <body>
+    <h1>Zadnji frame</h1>
     
+    <div>
+        <p id="status">Fetching...</p>
+        <img id="img" src="" style="display:block" alt="Camera Frame">
+    </div>
+
+    <script>
+        const frame = document.getElementById('img');
+        const status = document.getElementById('status');
+        
+        async function mfetch() {
+            status.textContent = 'Fetching...';
+            status.style.display = 'block';
+            
+        }
+        
+        mfetch();
+    </script>
 </body>
 </html>
