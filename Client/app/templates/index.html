@@ -19,8 +19,26 @@
             status.textContent = 'Fetching...';
             status.style.display = 'block';
             
+            try {
+                const response = await fetch('/fetch');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP napaka: ${response.status}`);
+                }
+                
+                const display = await response.json();
+                
+                if (display.success && display.img && display.timestamp) {
+                    frame.src = `${display.img}`;
+                    status.innerHTML = `${display.timestamp}`;
+                } else {
+                    throw new Error('Image data was not provided');
+                }
+            } catch (error) {
+                status.textContent = `Error fetching frame from server: ${error.message}`;
+            }
         }
-        
+
         mfetch();
     </script>
 </body>
