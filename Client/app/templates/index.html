@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    
+</head>
+<body>
+    <h1>Zadnji frame</h1>
+    
+    <div>
+        <p id="status">Fetching...</p>
+        <img id="img" src="" style="display:block" alt="Camera Frame">
+    </div>
+
+    <script>
+        const frame = document.getElementById('img');
+        const status = document.getElementById('status');
+        
+        let refreshTimer = null;
+        
+        async function mfetch() {
+            status.textContent = 'Fetching...';
+            status.style.display = 'block';
+            
+            try {
+                const response = await fetch('/fetch');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP napaka: ${response.status}`);
+                }
+                
+                const display = await response.json();
+                
+                if (display.success && display.img && display.timestamp) {
+                    frame.src = `${display.img}`;
+                    status.innerHTML = `${display.timestamp}`;
+                } else {
+                    throw new Error('Image data was not provided');
+                }
+            } catch (error) {
+                status.textContent = `Error fetching frame from server: ${error.message}`;
+            }
+        }
+        
+        function autoRefresh() {
+            if (refreshTimer) {
+                clearInterval(refreshTimer);
+            }
+            
+            refreshTimer = setInterval(mfetch, 10000);
+        }
+        
+        autoRefresh();
+        mfetch();
+    </script>
+</body>
+</html>
